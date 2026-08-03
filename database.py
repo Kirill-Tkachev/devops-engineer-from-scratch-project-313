@@ -1,24 +1,25 @@
-from sqlmodel import SQLModel, create_engine
+from sqlmodel import SQLModel, Session, create_engine
 from dotenv import load_dotenv
 import os
-
-from models import Link
 
 load_dotenv()
 
 database_url = os.getenv("DATABASE_URL")
 
-engine = create_engine(
-    database_url.replace("postgresql://", "postgresql+psycopg://")
-)
+if database_url is None:
+    database_url = "sqlite:///test.db"
+else:
+    database_url = database_url.replace(
+        "postgresql://",
+        "postgresql+psycopg://",
+        1,
+    )
+
+engine = create_engine(database_url)
 
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
-
-
-
-from sqlmodel import Session
 
 
 def get_session():
