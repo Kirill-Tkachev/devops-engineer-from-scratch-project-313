@@ -117,3 +117,50 @@ def test_delete_link():
     response = client.get(f"/api/links/{link_id}")
 
     assert response.status_code == 404
+
+
+def test_get_links_with_pagination():
+    client.post(
+        "/api/links",
+        json={
+            "original_url": "https://google.com",
+            "short_name": "google",
+        },
+    )
+
+    client.post(
+        "/api/links",
+        json={
+            "original_url": "https://yandex.ru",
+            "short_name": "yandex",
+        },
+    )
+
+    response = client.get("/api/links?range=[0,1]")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data) == 1
+    assert data[0]["short_name"] == "google"
+
+    assert response.headers["Content-Range"] == "links 0-1/2"
+
+
+def test_redirect_link():
+    client.post(
+        "/api/links",
+        json={
+            "original_url": "https://google.com",
+            "short_name": "google",
+        },
+    )
+
+    response = client.get(
+        "/r/google",
+        follow_redirects=False,
+    )
+
+    assert response.status_code == 307
+    assert response.headers["location"] == "https://google.com"
