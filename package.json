@@ -1,4 +1,5 @@
 {
+  "name": "hexlet-code",
   "dependencies": {
     "@hexlet/project-devops-deploy-crud-frontend": "^1.0.4"
   },
