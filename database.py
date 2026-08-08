@@ -2,6 +2,7 @@ from sqlmodel import SQLModel, Session, create_engine
 from dotenv import load_dotenv
 import os
 
+
 load_dotenv()
 
 database_url = os.getenv("DATABASE_URL")
@@ -14,6 +15,11 @@ else:
         "postgresql+psycopg://",
         1,
     )
+
+    if "sslmode=" not in database_url:
+        separator = "&" if "?" in database_url else "?"
+        database_url += f"{separator}sslmode=require"
+
 
 engine = create_engine(database_url)
 
