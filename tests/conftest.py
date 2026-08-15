@@ -1,3 +1,7 @@
+import os
+
+os.environ["TESTING"] = "1"
+
 import pytest
 from sqlmodel import Session, delete
 

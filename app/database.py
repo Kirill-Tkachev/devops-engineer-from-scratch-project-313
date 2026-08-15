@@ -7,10 +7,13 @@ load_dotenv()
 
 database_url = os.getenv("DATABASE_URL")
 
-if database_url is None:
-    raise RuntimeError("DATABASE_URL is not set")
+if os.getenv("TESTING") == "1":
+    database_url = "sqlite:///test.db"
 
-if database_url.startswith("postgres://"):
+elif database_url is None:
+    database_url = "sqlite:///test.db"
+
+elif database_url.startswith("postgres://"):
     database_url = database_url.replace(
         "postgres://",
         "postgresql+psycopg://",
@@ -23,7 +26,10 @@ elif database_url.startswith("postgresql://"):
         1,
     )
 
-if "sslmode=" not in database_url:
+if (
+    "sslmode=" not in database_url
+    and database_url.startswith("postgresql+psycopg://")
+):
     separator = "&" if "?" in database_url else "?"
     database_url += f"{separator}sslmode=require"
 
