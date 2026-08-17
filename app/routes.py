@@ -174,5 +174,5 @@ def redirect_link(
 
     return RedirectResponse(
         url=link.original_url,
-        status_code=302,
+        status_code=307,
     )
