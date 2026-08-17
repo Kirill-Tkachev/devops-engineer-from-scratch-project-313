@@ -1,27 +1,21 @@
-FROM python:3.12-slim
+FROM python:3.12-slim AS base
 
 RUN apt-get update && \
-    apt-get install -y nginx curl libpq-dev && \
+    apt-get install -y nginx libpq-dev git curl && \
     rm -rf /var/lib/apt/lists/*
-
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get install -y nodejs
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
+FROM base AS final
 WORKDIR /app
 
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev
 
-COPY package*.json ./
-RUN npm install
-
-COPY . .
-
-RUN mkdir -p /app/public
-RUN cp -r ./node_modules/@hexlet/project-devops-deploy-crud-frontend/dist/. /app/public/
-
+COPY app ./app
 COPY nginx.conf /etc/nginx/nginx.conf
+
+ENV PORT=8080
+ENV DATABASE_URL=""
 
 CMD sh -c "uv run uvicorn app.main:app --host 0.0.0.0 --port 8080 & nginx -g 'daemon off;'"
