@@ -20,8 +20,8 @@ RUN npm install
 COPY . .
 
 RUN mkdir -p /app/public
-RUN cp -r ./node_modules/@hexlet/project-devops-deploy-crud-frontend/dist/. /app/public/
+RUN cp -r ./dist/. /app/public/
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
-CMD sh -c "uv run uvicorn main:app --host 0.0.0.0 --port 8080 & nginx -g 'daemon off;'"
+CMD sh -c "uv run uvicorn app.main:app --host 0.0.0.0 --port 8080 & nginx -g 'daemon off;'"

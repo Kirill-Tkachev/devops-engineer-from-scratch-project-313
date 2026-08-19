@@ -1,8 +1,8 @@
 import pytest
 from sqlmodel import Session, delete
 
-from database import engine, create_db_and_tables
-from models import Link
+from app.database import engine, create_db_and_tables
+from app.models import Link
 
 
 @pytest.fixture(autouse=True)
