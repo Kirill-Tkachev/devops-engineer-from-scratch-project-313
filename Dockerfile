@@ -7,7 +7,7 @@ RUN apt-get update && \
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs
 
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ RUN npm install
 COPY . .
 
 RUN mkdir -p /app/public
-RUN cp -r ./dist/. /app/public/
+RUN cp -r ./node_modules/@hexlet/project-devops-deploy-crud-frontend/dist/. /app/public/
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
