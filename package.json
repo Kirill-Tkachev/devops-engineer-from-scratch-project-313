@@ -7,6 +7,7 @@
     "concurrently": "^10.0.4"
   },
   "scripts": {
+    "build": "start-hexlet-devops-deploy-crud-frontend --build",
     "frontend": "start-hexlet-devops-deploy-crud-frontend",
     "dev": "concurrently \"make run\" \"npm run frontend\""
   }
