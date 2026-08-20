@@ -1,5 +1,5 @@
 setup:
-	npm install
+	pnpm install
 	uv sync --frozen --no-dev
 
 run:
